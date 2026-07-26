@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0a0b10" />
+  <title>NoOracle Lotto — Sepolia demo</title>
+  <meta name="description" content="Учебная крипто-лотерея без Chainlink. Только Ethereum Sepolia." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="noise"></div>
+  <header class="topbar">
+    <a class="brand" href="#">NOORACLE<span>LOTTO</span></a>
+    <div class="top-actions">
+      <span id="networkBadge" class="badge warning">SEPOLIA · DEMO</span>
+      <button id="connectButton" class="button secondary">Подключить кошелёк</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow">ON-CHAIN LOTTERY / intentionally vulnerable</div>
+        <h1>Крипто-лотерея<br><span>без оракула.</span></h1>
+        <p class="lead">Простой тестовый прототип: кошелёк → билет → розыгрыш → вывод выигрыша. Случайность берётся из блока и намеренно небезопасна.</p>
+        <div class="hero-buttons">
+          <a class="button primary" href="#play">Купить билет</a>
+          <a class="button ghost" href="#security">Почему она дырявая</a>
+        </div>
+      </div>
+      <div class="orb-wrap" aria-hidden="true">
+        <div class="orb"><span>?</span></div>
+        <div class="orbit one"></div><div class="orbit two"></div>
+      </div>
+    </section>
+
+    <section class="stats" aria-label="Статистика раунда">
+      <article><span>Банк раунда</span><strong id="potValue">0.000 ETH</strong></article>
+      <article><span>Билетов</span><strong id="ticketCount">0</strong></article>
+      <article><span>Цена билета</span><strong id="ticketPrice">0.001 ETH</strong></article>
+      <article><span>Раунд</span><strong id="roundId">#1</strong></article>
+    </section>
+
+    <section id="play" class="grid">
+      <article class="panel purchase-panel">
+        <div class="panel-label">ENTER ROUND</div>
+        <h2>Купить билеты</h2>
+        <p>Один адрес может купить несколько билетов. Каждый билет добавляет адрес в массив ещё один раз.</p>
+        <label for="quantity">Количество</label>
+        <div class="quantity-row">
+          <button id="minusButton" class="square" aria-label="Уменьшить">−</button>
+          <input id="quantity" type="number" min="1" max="25" value="1" inputmode="numeric" />
+          <button id="plusButton" class="square" aria-label="Увеличить">+</button>
+        </div>
+        <div class="total-row"><span>Итого</span><strong id="totalCost">0.001 ETH</strong></div>
+        <button id="buyButton" class="button primary wide">Купить за test ETH</button>
+        <p class="micro">Нужен только тестовый ETH сети Sepolia. Реальные средства сюда не отправлять.</p>
+      </article>
+
+      <article class="panel draw-panel">
+        <div class="panel-label">ROUND CONTROL</div>
+        <h2>Розыгрыш</h2>
+        <p>В этой версии владелец контракта сам выбирает момент розыгрыша — одна из главных уязвимостей.</p>
+        <div class="winner-box">
+          <span>Последний победитель</span>
+          <strong id="winnerValue">Пока нет</strong>
+        </div>
+        <button id="drawButton" class="button danger wide">Draw winner</button>
+        <button id="claimButton" class="button secondary wide">Забрать выигрыш</button>
+      </article>
+    </section>
+
+    <section id="security" class="security">
+      <div>
+        <div class="eyebrow">KNOWN WEAKNESSES</div>
+        <h2>Где здесь дыры</h2>
+      </div>
+      <div class="weakness-list">
+        <article><b>01</b><div><h3>Предсказуемая случайность</h3><p><code>prevrandao</code>, timestamp и blockhash не дают честной случайности для лотереи.</p></div></article>
+        <article><b>02</b><div><h3>Владелец выбирает момент</h3><p>Администратор может отложить транзакцию и попытаться получить более выгодный результат.</p></div></article>
+        <article><b>03</b><div><h3>Нет независимого подтверждения</h3><p>Нет VRF, commit-reveal или внешнего проверяемого источника энтропии.</p></div></article>
+        <article><b>04</b><div><h3>Не проходило аудит</h3><p>Код сделан как лабораторный стенд. Mainnet и реальные ставки запрещены.</p></div></article>
+      </div>
+    </section>
+
+    <section class="how">
+      <div class="eyebrow">HOW IT WORKS</div>
+      <h2>Четыре действия</h2>
+      <div class="steps">
+        <article><span>1</span><h3>Connect</h3><p>Подключаешь MetaMask и выбираешь Sepolia.</p></article>
+        <article><span>2</span><h3>Buy</h3><p>Отправляешь тестовый ETH и получаешь билеты.</p></article>
+        <article><span>3</span><h3>Draw</h3><p>Владелец вызывает небезопасный розыгрыш.</p></article>
+        <article><span>4</span><h3>Claim</h3><p>Победитель забирает начисленный приз.</p></article>
+      </div>
+    </section>
+
+    <section class="terminal">
+      <div class="terminal-head"><span></span><span></span><span></span><b>activity.log</b></div>
+      <div id="activityLog" class="terminal-body"><p><i>›</i> Прототип загружен. Сейчас включён локальный demo-режим.</p></div>
+    </section>
+  </main>
+
+  <footer><span>NoOracle Lotto / Sepolia laboratory</span><span>TESTNET ONLY · NO AUDIT · NO REAL MONEY</span></footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.5/dist/ethers.min.js"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
